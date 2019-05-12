@@ -23,6 +23,155 @@ lambda+|bias|overfit
 交叉验证：将原始数据(dataset)进行分组,一部分做为训练集(train set),另一部分做为验证集(validation set),首先用训练集对分类器进行训练,
 在利用验证集来测试训练得到的模型(model),以此来做为评价分类器的性能指标.
 
-#linear regression
+# linear regression
+
 concept:利用数理统计中回归分析，来确定两种或两种以上变量间相互依赖的定量关系
-cost function:
+
+![1557643593679](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\1557643593679.png)
+
+# 优化方法
+
+梯度下降法：**梯度下降法的优化思想是用当前位置负梯度方向作为搜索方向，因为该方向为当前位置的最快下降方向，所以也被称为是”最速下降法“。最速下降法越接近目标值，步长越小，前进越慢。**梯度下降法的搜索迭代示意图如下图所示：
+
+![img](https://images2017.cnblogs.com/blog/1022856/201709/1022856-20170916201932735-243646199.png)
+
+**梯度下降法的缺点：**
+
+　　**（1）靠近极小值时收敛速度减慢，如下图所示；**
+
+　　**（2）直线搜索时可能会产生一些问题；**
+
+　　**（3）可能会“之字形”地下降。**
+
+牛顿法：首先，选择一个接近函数 *f* (*x*)零点的 *x*0，计算相应的 *f* (*x*0) 和切线斜率*f  '* (*x*0)（这里*f '* 表示函数 *f*  的导数）。然后我们计算穿过点(*x*0,  *f*  (*x*0)) 并且斜率为*f* '(*x*0)的直线和 *x* 轴的交点的*x*坐标，也就是求如下方程的解：
+
+![img](https://images0.cnblogs.com/blog2015/764050/201508/222309088311820.png)
+
+　　我们将新求得的点的 *x* 坐标命名为*x*1，通常*x*1会比*x*0更接近方程*f*  (*x*) = 0的解。因此我们现在可以利用*x*1开始下一轮迭代。迭代公式可化简为如下所示：
+
+![img](https://images0.cnblogs.com/blog2015/764050/201508/222309221284615.png)
+
+　　已经证明，如果*f*  ' 是连续的，并且待求的零点*x*是孤立的，那么在零点*x*周围存在一个区域，只要初始值*x*0位于这个邻近区域内，那么牛顿法必定收敛。 并且，如果*f*  ' (*x*)不为0, 那么牛顿法将具有平方收敛的性能. 粗略的说，这意味着每迭代一次，牛顿法结果的有效数字将增加一倍。下图为一个牛顿法执行过程的例子。
+
+　　由于牛顿法是基于当前位置的切线来确定下一次的位置，所以牛顿法又被很形象地称为是"切线法"。
+
+拟牛顿法：
+
+拟牛顿法的基本思想如下。首先构造目标函数在当前迭代xk的二次模型：
+
+![img](https://images0.cnblogs.com/blog2015/764050/201508/222253268161863.png)
+
+　　这里Bk是一个对称正定矩阵，于是我们取这个二次模型的最优解作为搜索方向，并且得到新的迭代点：
+
+![img](https://images0.cnblogs.com/blog2015/764050/201508/222254384106201.png)
+
+　　其中我们要求步长ak 满足Wolfe条件。这样的迭代与牛顿法类似，区别就在于用近似的Hesse矩阵Bk代替真实的Hesse矩阵。所以拟牛顿法最关键的地方就是每一步迭代中矩阵Bk的更新。现在假设得到一个新的迭代xk+1
+
+，并得到一个新的二次模型：
+
+![img](https://images0.cnblogs.com/blog2015/764050/201508/222256385508904.png)
+
+　　我们尽可能地利用上一步的信息来选取Bk。具体地，我们要求
+
+ 
+
+![img](https://images0.cnblogs.com/blog2015/764050/201508/222257530664204.png)
+
+　　
+
+从而得到
+
+![img](https://images0.cnblogs.com/blog2015/764050/201508/222258392223638.png)
+
+　　这个公式被称为割线方程。常用的拟牛顿法有DFP算法和BFGS算法
+
+# 线性回归的评估指标
+
+均方误差（MSE）
+
+MSE （Mean Squared Error）叫做均方误差。看公式
+
+
+
+![img](https://upload-images.jianshu.io/upload_images/9085642-db60f7a87d740e07.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/482/format/webp)
+
+均方根误差（RMSE）
+
+RMSE（Root Mean Squard Error）均方根误差。
+
+
+
+![img](https://upload-images.jianshu.io/upload_images/9085642-daf2f14301474004.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/534/format/webp)
+
+MAE
+
+MAE(平均绝对误差)
+
+
+
+![img](https://upload-images.jianshu.io/upload_images/9085642-d8b6f1b5daac07bc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/492/format/webp)
+
+R Squared
+
+上面的几种衡量标准针对不同的模型会有不同的值。比如说预测房价 那么误差单位就是万元。数子可能是3，4，5之类的。那么预测身高就可能是0.1，0.6之类的。没有什么可读性，到底多少才算好呢？不知道，那要根据模型的应用场景来。
+ 看看分类算法的衡量标准就是正确率，而正确率又在0～1之间，最高百分之百。最低0。很直观，而且不同模型一样的。那么线性回归有没有这样的衡量标准呢？答案是有的。
+ 那就是R Squared也就R方
+
+
+
+![img](https:////upload-images.jianshu.io/upload_images/9085642-a870d060a995bb24.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/304/format/webp)
+
+image.png
+
+光看这些东西很懵逼，其中分子是Residual Sum of Squares 分母是 Total Sum of Squares
+ 那就看公式吧
+
+
+
+![img](https:////upload-images.jianshu.io/upload_images/9085642-183578d3d6322bea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/353/format/webp)
+
+
+
+# sklearn参数详解
+
+## linear regression
+
+函数调用形式
+
+LogisticRegression(penalty='l2',dual=False,tol=1e-4,C=1.0,fit_intercept=True,intercept_scaling=1,class_weight=None,random_state=None,solver='liblinear',max_iter=100,multi_class='ovr',verbose=0,warm_start=False, n_jobs=1)
+
+penalty 字符串型，’l1’ or ‘l2’，默认：’l2’；正则化类型。
+
+dual 布尔型，默认：False。当样本数>特征数时，令dual=False；用于liblinear解决器中L2正则化。
+
+tol 浮点型，默认：1e-4；迭代终止判断的误差范围。
+
+C 浮点型，默认：1.0；其值等于正则化强度的倒数，为正的浮点数。数值越小表示正则化越强。
+
+fit_intercept 布尔型，默认：True；指定是否应该向决策函数添加常量(即偏差或截距)。
+
+intercept_scaling 浮点型，默认为1；仅仅当solver是”liblinear”时有用。
+
+class_weight 默认为None；与“{class_label: weight}”形式中的类相关联的权重。如果不给，则所有的类的权重都应该是1。
+
+random_state 整型，默认None；当“solver”==“sag”或“liblinear”时使用。在变换数据时使用的伪随机数生成器的种子。如果是整数, random_state为随机数生成器使用的种子;若为RandomState实例，则random_state为随机数生成器;如果没有，随机数生成器就是' np.random '使用的RandomState实例。
+
+solver {'newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga'}，默认: 'liblinear'；用于优化问题的算法。
+
+对于小数据集来说，“liblinear”是个不错的选择，而“sag”和'saga'对于大型数据集会更快。
+
+对于多类问题，只有'newton-cg'， 'sag'， 'saga'和'lbfgs'可以处理多项损失;“liblinear”仅限于“one-versus-rest”分类。 
+
+max_iter 最大迭代次数，整型，默认是100；
+
+multi_class 字符串型，{ovr'， 'multinomial'}，默认:'ovr'；如果选择的选项是“ovr”，那么一个二进制问题适合于每个标签，否则损失最小化就是整个概率分布的多项式损失。对liblinear solver无效。
+
+verbose 整型，默认是0；对于liblinear和lbfgs solver，verbose可以设为任意正数。 
+
+warm_start 布尔型，默认为False；当设置为True时，重用前一个调用的解决方案以适合初始化。否则，只擦除前一个解决方案。对liblinear解码器无效。
+
+n_jobs 整型，默认是1；如果multi_class='ovr' ，则为在类上并行时使用的CPU核数。无论是否指定了multi_class，当将' solver ' '设置为'liblinear'时，将忽略此参数。如果给定值为-1，则使用所有核。
+
+
+
+
