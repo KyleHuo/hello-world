@@ -1,0 +1,22 @@
+有监督、无监督、泛化能力、过拟合欠拟合(方差和偏差以及各自解决办法)、交叉验证
+线性回归的原理
+线性回归损失函数、代价函数、目标函数
+优化方法(梯度下降法、牛顿法、拟牛顿法等)
+线性回归的评估指标
+sklearn参数详解
+#basic concepts
+有监督:数据集中的每个样本都有相应的“正确答案”,再根据这些样本作出预测
+无监督:直接对样本的特征进行预测
+泛化能力：一个机器学习算法对于没有见过的样本的识别能力
+过拟合：模型的复杂度要高于实际的问题，导致模型死记硬背的记住
+欠拟合：模型的复杂度较低，没法很好的学习到数据背后的规律。
+bias:所有可能的训练数据集训练出的所有模型的输出的平均值与真实模型的输出值之间的差异。
+Variance:是不同的训练数据集训练出的模型输出值之间的差异。
+表头|表头|表头
+ways|:changing parameter:|solving problem:
+train size+|variance+|overfit
+feature-|varaince|overfit
+feature+|bias|underfit
+poly feature+|bias|underfit
+lambda-|bias|underfit
+lambda+|bias|overfit
