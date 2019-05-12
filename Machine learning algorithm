@@ -20,3 +20,9 @@ feature+|bias|underfit
 poly feature+|bias|underfit
 lambda-|bias|underfit
 lambda+|bias|overfit
+交叉验证：将原始数据(dataset)进行分组,一部分做为训练集(train set),另一部分做为验证集(validation set),首先用训练集对分类器进行训练,
+在利用验证集来测试训练得到的模型(model),以此来做为评价分类器的性能指标.
+
+#linear regression
+concept:利用数理统计中回归分析，来确定两种或两种以上变量间相互依赖的定量关系
+cost function:
