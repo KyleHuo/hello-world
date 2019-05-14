@@ -1,0 +1,115 @@
+1、逻辑回归与线性回归的联系与区别 
+2、逻辑回归的原理 
+3、逻辑回归损失函数推导及优化 
+4、正则化与模型评估指标 
+5、逻辑回归的优缺点 
+6、样本不均衡问题解决办法
+sklearn参数
+
+# 逻辑回归与线性回归的联系与区别
+
+​     逻辑回归和线性回归两者其实都是在预测值，但是Linear regression解决的是回归问题，输出是连续值；Logistic regression解决的是分类问题，输出的是离散值。
+
+　1）线性回归要求因变量服从正态分布，logistic回归对变量分布没有要求。
+
+针对第一点，**线性回归要求因变量服从正态分布，这个不是很了解，**当然有大神解释线性回归并不是要求**因变量Y**服从正态分布，而是**要求残差e是正态分布**
+
+　2）线性回归要求因变量（Y）是连续性数值变量，而logistic回归要求因变量是分类型变量。
+
+　3）线性回归要求自变量和因变量呈线性关系，而logistic回归不要求自变量和因变量呈线性关系
+
+　4）线性回归是直接分析因变量与自变量的关系，而logistic回归是分析因变量取某个值的概率与自变量的关系
+
+# 逻辑回归的原理
+
+既然是分类，输出只能是固定的那么几类。所以如果我们要用线性回归解决一个分类问题，就需要有一个函数把连续值映射成离散值。这个函数就是logistics function，其中Sigmoid function就是一种常用的logistics function。 Sigmoid function，即下图中的g函数：
+
+
+
+![img](https://pic1.zhimg.com/80/v2-703c600a7bbc1ca0185192506d1718cc_hd.jpg)
+
+
+
+二分类中，我们通常可以把两类分别用0和1表示，以z=0（即最终函数值h为0.5）为决策边界。如果我们能找到合适的参数θ使得函数与数据差不多拟合，那么就可以实现逻辑回归了
+
+
+
+# 逻辑回归损失函数推导及优化
+
+逻辑回归的代价函数为：
+
+![img](https://pic2.zhimg.com/80/v2-8e68f9a42aca87d983085e5cfe75efd5_hd.jpg)
+
+
+
+# 正则化与模型评估指标
+
+## 正则化
+
+如果我们的hypothesis function（期望函数）出现了过拟合的问题，我们可以通过对hypothesis function加入正则项来避免过拟合。比较常用的正则化项有模型参数向量的范数，L1、L2等。
+线性回归中一个较为简单的能防止过拟合问题的假设：
+
+![img](https://pic3.zhimg.com/80/v2-1e579261aac11c07bbd846572acf51d6_hd.jpg)
+
+其中λ又称为正则化参数（Regularization Parameter）。 注：根据惯例，我们不对θ0 进行惩罚。
+
+## 模型评估指标
+
+回归任务中，我们评估模型时用过MSE（均方误差）等指标，在分类任务中，我们用一下指标：
+
+- 2.1错误率与精度
+  错误率是错误样本所占总数的比例；精度是正确样本所占的比例
+- 2.2precision（查准率）、recall（查全率）和F1
+  分类结果的混淆矩阵（Confusion matrix）由4种情形组成：TP（真正例）、FP（假正例）、TN（真反例）、FN（假反例）。
+
+> precision = TP/(TP+FP)，所有**预测是正例的样本**中有多少真的是正例.
+> recall = TP/(TP+FN)，所有的正例样本你预测对了多少。
+
+precision和recall是一对矛盾的度量。常常一个比较高另一个就比较低。这样在比较两个学习器时就可能发生困难（一个precision好一个recall好），那怎么办呢？我们可以采用人为设定决策边界做出PR曲线，看谁面积大哪个学习器性能就比较好。
+当然这个面积不太好算，所以我们采用F1作为一个precision和recall的综合度量。(P:precision; R:recall)
+
+> F1=2PR/(P+R)
+
+如果客户对P或R中的某一个指标更在乎，可以设一个加权数β表示recall对precision的相对重要性。β>1时recall更重要；β<1时precision更重要：
+
+> Fβ=（1+β）PR/(p*β^2+R)
+
+　
+
+## 逻辑回归的优缺点
+
+1. 优点：
+   1.1 可解释性，得出来的值可以解释为分类判断的概率。
+   1.2 Logistic 回归是二分类任务的首选方法。
+   1.3 非常容易实现，且训练起来很高效。因此也是一个很好的基准，你可以用它来衡量其他更复杂的算法的性能。
+2. 缺点：
+   2.1 逻辑回归在不引入其他方法的情况下，只能处理线性可分的数据，因为它的决策面是线性的。
+   2.2 很难处理数据不平衡的问题。举个例子：如果我们对于一个正负样本非常不平衡的问题比如正负样本比 10000:1.我们把所有样本都预测为正也能使损失函数的值比较小。但是作为一个分类器，它对正负样本的区分能力不会很好。
+
+# 样本不均衡问题解决办法
+
+1. undersampling（欠采样）：去除样例多的一类使正反数目相对接近。代表性算法：EasyEnsemble。
+2. oversampling（过采样）：增加样例少的一类使之数目相对接近。代表性算法：smote过采样。
+3. threshold-moving（阈值移动）：详见西瓜书p67.
+
+# sklearn参数
+
+```text
+sklearn.linear_model.LogisticRegression(penalty=’l2’, dual=False, tol=0.0001, C=1.0, fit_intercept=True, intercept_scaling=1, class_weight=None, random_state=None, solver=’liblinear’, max_iter=100, multi_class=’ovr’, verbose=0, warm_start=False, n_jobs=1)
+```
+
+- penalty(字符串类型)：惩罚项，可选参数为'l1'和'l2'，默认为'l2'。L1G规范假设的是模型的参数满足拉普拉斯分布，L2假设的模型参数满足高斯分布。
+- dual（布尔型）：对偶或原始方法，默认为False。当样本数量>样本特征的时候，dual通常设置为False。用于liblinear解决器中L2正则化。
+- tol（浮点型）：迭代终止判断的误差范围，float类型，默认为1e-4。
+- c（浮点型）：正则化系数λ的倒数，float类型，默认为1.0。越小的数值表示越强的正则化。
+- fit_intercept（bool类型）：指定是否应该向决策函数添加常量(即偏差或截距)，默认为True。
+- interceptscaling：仅在正则化项为”liblinear”，且fitintercept设置为True时有用。float类型，默认为1。
+- class_weight：用于标示分类模型中各种类型的权重，默认为不输入，也就是不考虑权重，即为None。
+- random_state：随机数种子，默认为无，仅在正则化优化算法为sag,liblinear时有用。
+- solver：优化算法选择参数，只有五个可选参数，即newton-cg,lbfgs,liblinear,sag,saga。默认为liblinear。可根据数据和分类具体情况选择。‘liblinear’ 在优化问题中使用的算法。对于小数据集，‘liblinear’是一个不错的选择，但是’sag’和’saga’对于 大数据集 来说更快。对于 多类问题 ，只有’newton-cg’，‘sag’，'saga’和’lbfgs’处理多项损失; 'liblinear’仅限于 一对一休息方案。‘newton-cg’，'lbfgs’和’sag’只处理L2惩,而’liblinear’和’saga’处理L1惩罚。
+- max_iter（整型）：算法收敛最大迭代次数，默认为100。
+- multi_class（字符串型）：分类方式选择参数，可选参数为ovr和multinomial，默认为'ovr'。如果是二元逻辑回归，ovr和multinomial并没有任何区别，区别主要在多元逻辑回归上。多类选项可以是’ovr’或’multinomial’。 'ovr’是表示one-vs-rest，'multinomial’是表示many-vs-many。
+- verbose：日志冗长度，int类型。默认为0。就是不输出训练过程，1的时候偶尔输出结果，大于1，对于每个子模型都输出。
+- warm_start(布尔型)：默认为False；当设置为True时，重用前一个调用的解决方案以适合初始化。否则，只擦除前一个解决方案。对liblinear解码器无效。
+- njobs：整型，默认是1；如果multiclass=‘ovr’ ，则为在类上并行时使用的CPU核数。无论是否指定了multi_class，当将’ solver ’ '设置为’liblinear’时，将忽略此参数。如果给定值为-1，则使用所有核。
+
